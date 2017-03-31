@@ -8,7 +8,7 @@ function square(x, y, n, board) {
   this.y = y;
   this.col = (board[x][y] && board[x][y].col) || ((x + y) % 2 !== 0 ? dark : light);
   this.value = (board[x][y] && board[x][y].value) || 0;
-  this.neighbors = [];
+  this.neighbors = (board[x][y] && board[x][y].neighbors) || [];
   this.heuristic = (board[x][y] && board[x][y].heuristic) || Infinity;
   this.width = (width - 50) / n;
   this.height = (height - 50) / n;
@@ -16,14 +16,15 @@ function square(x, y, n, board) {
   this.pixelStartY = this.y * (height - 50) / n;
 
   this.set = function() {
-    this.col = '#080';
+    this.col = '#37bb22';
     this.value = 1;
+    this.highlightNeighbor(true);
   }
 
   this.unset = function() {
-    console.log('unsetting', this.value)
     this.col = (this.x + this.y) % 2 !== 0 ? dark : light;
     this.value = 0;
+    this.highlightNeighbor(false);
   }
 
   this.display = function() {
@@ -31,16 +32,17 @@ function square(x, y, n, board) {
     rect(this.pixelStartX, this.pixelStartY, this.width, this.height);
     fill('#777');
     text(this.heuristic, this.pixelStartX + 5, this.pixelStartY + 15);
+    text(this.value, this.pixelStartX + this.width - 15, this.pixelStartY + this.height - 5);
   }
 
   this.clicked = function() {
     if(mouseX < this.pixelStartX || mouseX > this.pixelStartX + this.width) return;
     if(mouseY < this.pixelStartY || mouseY > this.pixelStartY + this.height) return;
-    console.log('called', this.value, this.y)
 
     if(!this.value) this.set();
     else this.unset();
   }
+
   this.calcHeuristic = function() {
     var possibilities = [
       {
@@ -76,14 +78,28 @@ function square(x, y, n, board) {
         y: y - 2
       }
     ];
-
+    this.neighbors = [];
     for(var i = 0; i < n; i++) {
       if(possibilities[i].x > -1 && possibilities[i].x < n && possibilities[i].y > -1 && possibilities[i].y < n) {
-        if(!board[possibilities[i].x][possibilities[i].y]) return;
+        if(!board[possibilities[i].x][possibilities[i].y] || board[possibilities[i].x][possibilities[i].y].value) {
+          continue;
+        }
         this.neighbors.push(possibilities[i]);
       }
     }
 
     this.heuristic = this.neighbors.length;
+  }
+
+  this.highlightNeighbor = function(val) {
+    return;
+    var min = Infinity;
+    this.neighbors.forEach(function(neighbor) {
+      if(board[neighbor.x][neighbor.y].heuristic < min) min = board[neighbor.x][neighbor.y];
+      board[neighbor.x][neighbor.y].col = val ? "#950" : (board[neighbor.x][neighbor.y].x + board[neighbor.x][neighbor.y].y) % 2 !== 0 ? dark : light;
+    });
+    if(val) {
+      min.col = "#A00";
+    }
   }
 }

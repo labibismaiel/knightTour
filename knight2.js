@@ -33,25 +33,10 @@ function buildHeuristic() {
   }
 }
 
-/*function init() {
-  var arr = [];
-  for(var i = 0; i < n + 4; i++) {
-    for(var j = 0; j < n + 4; j++) {
-      if(i < 2 || i > n + 1 || j < 2 || j > n + 1) {
-        arr[i] = arr[i] || [];
-        arr[i][j] = -1;
-      } else {
-        arr[i] = arr[i] || [];
-        arr[i][j] = 0;
-      }
-    }
-  }
-  return arr;
-}*/
 
 function setup() {
   createCanvas(600, 600);
-
+  frameRate(10);
   //board = init();
 }
 
@@ -59,13 +44,13 @@ function mousePressed() {
   for (var i = 0; i < n; i ++) {
     for (var j = 0; j < n; j ++) {
       board[i][j].clicked();
+      board[i][j].calcHeuristic();
     }
   }
 }
 
 function draw() {
   background(255);
-  //rectMode(CENTER);
 
   drawBoard();
 
