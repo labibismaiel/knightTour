@@ -1,4 +1,3 @@
-var buffer = 0;
 var board = [];
 var n = 8;
 var started = false;
@@ -7,8 +6,8 @@ function drawBoard () {
   background(255);
   stroke(0);
 
-  for (var i = 0; i < n + 2 * buffer; i ++) {
-    for (var j = 0; j < n + 2 * buffer; j ++) {
+  for (var i = 0; i < n; i ++) {
+    for (var j = 0; j < n; j ++) {
       board[i] = board[i] || [];
       if(board[i][j] == -1) {
         fill(150, 0, 0);
@@ -26,8 +25,8 @@ function drawBoard () {
 }
 
 function buildHeuristic() {
-  for (var i = 0; i < n + 2 * buffer; i ++) {
-    for (var j = 0; j < n + 2 * buffer; j ++) {
+  for (var i = 0; i < n; i ++) {
+    for (var j = 0; j < n; j ++) {
       board[i][j].calcHeuristic();
     }
   }

@@ -48,7 +48,7 @@ function square(x, y, n, board) {
     else this.unset();
   }
 
-  this.calcHeuristic = function(val) {
+  this.calcHeuristic = function() {
     var possibilities = [
       {
         x: x + 1,
@@ -86,7 +86,7 @@ function square(x, y, n, board) {
 
     this.neighbors = [];
 
-    for(var i = 0; i < n; i++) {
+    for(var i = 0; i < possibilities.length; i++) {
       if(possibilities[i].x > -1 && possibilities[i].x < n && possibilities[i].y > -1 && possibilities[i].y < n) {
         if(board[possibilities[i].x][possibilities[i].y] && !board[possibilities[i].x][possibilities[i].y].value) {
           this.neighbors.push(possibilities[i]);
@@ -94,7 +94,7 @@ function square(x, y, n, board) {
 
       }
     }
-
+    console.log(this.x, this.y, this.neighbors)
     this.heuristic = this.neighbors.length;
   }
 
