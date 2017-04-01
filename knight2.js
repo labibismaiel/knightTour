@@ -33,20 +33,15 @@ function buildHeuristic() {
   }
 }
 
-
 function setup() {
   createCanvas(600, 600);
   frameRate(10);
-  //board = init();
 }
 
 function mousePressed() {
-  for (var i = 0; i < n; i ++) {
-    for (var j = 0; j < n; j ++) {
-      board[i][j].clicked();
-      board[i][j].calcHeuristic();
-    }
-  }
+  var i = parseInt(mouseX / ((width - 50) / n)),
+      j = parseInt(mouseY / ((height - 50) / n));
+  board[i][j].clicked();
 }
 
 function draw() {
@@ -59,3 +54,4 @@ function draw() {
     buildHeuristic();
   }
 }
+

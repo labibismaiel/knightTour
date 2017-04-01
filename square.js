@@ -19,6 +19,11 @@ function square(x, y, n, board) {
     this.col = '#37bb22';
     this.value = 1;
     this.highlightNeighbor(true);
+    this.updateHeuristics();
+    var current = this.selectNeighbor(this);
+    if(current) {
+      current.col = "#A00";
+    }
   }
 
   this.unset = function() {
@@ -43,7 +48,7 @@ function square(x, y, n, board) {
     else this.unset();
   }
 
-  this.calcHeuristic = function() {
+  this.calcHeuristic = function(val) {
     var possibilities = [
       {
         x: x + 1,
@@ -78,13 +83,15 @@ function square(x, y, n, board) {
         y: y - 2
       }
     ];
+
     this.neighbors = [];
+
     for(var i = 0; i < n; i++) {
       if(possibilities[i].x > -1 && possibilities[i].x < n && possibilities[i].y > -1 && possibilities[i].y < n) {
-        if(!board[possibilities[i].x][possibilities[i].y] || board[possibilities[i].x][possibilities[i].y].value) {
-          continue;
+        if(board[possibilities[i].x][possibilities[i].y] && !board[possibilities[i].x][possibilities[i].y].value) {
+          this.neighbors.push(possibilities[i]);
         }
-        this.neighbors.push(possibilities[i]);
+
       }
     }
 
@@ -101,5 +108,50 @@ function square(x, y, n, board) {
     if(val) {
       min.col = "#A00";
     }
+  }
+
+  this.selectNeighbor = function() {
+    var candidates = [];
+    var min = {heuristic: Infinity};
+    this.neighbors.forEach(function(item) {
+      if(board[item.x][item.y].heuristic < min.heuristic) {
+        min = board[item.x][item.y];
+        candidates = [board[item.x][item.y]];
+      } else if(board[item.x][item.y].heuristic == min.heuristic) {
+        candidates.push(board[item.x][item.y])
+      }
+    });
+
+    var max = 0;
+    var maxObj;
+
+    if(candidates.length == 1) {
+      return min;
+    } else if(candidates.length > 1) {
+
+      candidates.forEach(function(item) {
+        var d = dist(item.x, item.y, n / 2, n / 2)
+        if(d > max) {
+          maxObj = item;
+          max = d;
+        }
+      });
+      return maxObj;
+    } else {
+      console.log('failed');
+      return false;
+    }
+  }
+  this.updateHeuristics = function() {
+    this.neighbors.forEach(function(neighbor) {
+      var temp = board[neighbor.x][neighbor.y].neighbors.filter(function(item) {
+        return !(item.x == this.x && item.y == this.y);
+      }.bind(this));
+      board[neighbor.x][neighbor.y].neighbors = temp;
+    }.bind(this));
+
+    this.neighbors.forEach(function(item) {
+      board[item.x][item.y].heuristic--;
+    });
   }
 }
