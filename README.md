@@ -1,7 +1,7 @@
 # Knight Tour Problem using JS and P5js for visualization
 
-The solution uses Warnsdorff's solution for the problem but using cartasion distance as a heuristic function.
-
+The solution uses 's solution for the problem but using cartasion distance as a heuristic function.
+Warnsdorff
 ## Installation
 No installation needed, just run index.html file
 
