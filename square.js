@@ -94,7 +94,6 @@ function square(x, y, n, board) {
 
       }
     }
-    console.log(this.x, this.y, this.neighbors)
     this.heuristic = this.neighbors.length;
   }
 

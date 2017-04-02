@@ -1,5 +1,6 @@
 var board = [];
 var n = 8;
+var canvasSize = 600;
 var started = false;
 
 function drawBoard () {
@@ -33,7 +34,7 @@ function buildHeuristic() {
 }
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(canvasSize, canvasSize);
   frameRate(10);
 }
 
